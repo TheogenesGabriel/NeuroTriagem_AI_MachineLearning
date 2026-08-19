@@ -1,0 +1,3 @@
+roboflow
+ultralytics
+opencv-python
