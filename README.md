@@ -1,2 +1,5 @@
 # Repositório Base da parte de Visão Computacional e do modelo preditivo
-[Diagrama da Arquitetura NeuroTriagem](img/diagrama_triagem.jpeg)
+</div>
+<div align="center">
+  <img src="img/diagrama_triagem.png" alt="Diagrama funcional NeuroTriagem.AI" width="780"/>
+</div>
