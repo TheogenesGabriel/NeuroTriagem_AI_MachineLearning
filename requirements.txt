@@ -1,0 +1,8 @@
+PySide6
+opencv-python
+ultralytics
+torch
+websockets
+scikit-learn
+joblib
+numpy
