@@ -1,0 +1,10 @@
+venv/ 
+.build/
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+artifacts/
+data/*.csv
+!data/random_forest_template.csv
+models/random_forest_*.joblib
+!models/random_forest_regras_experimental.joblib

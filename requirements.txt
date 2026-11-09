@@ -1,0 +1,8 @@
+PySide6
+opencv-python
+ultralytics
+torch
+pyserial
+scikit-learn==1.9.1
+joblib
+numpy

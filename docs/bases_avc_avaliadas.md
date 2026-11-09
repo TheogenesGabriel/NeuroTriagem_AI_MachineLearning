@@ -1,0 +1,29 @@
+# Bases públicas avaliadas para o Random Forest
+
+Pesquisa realizada em 1 de novembro de 2026. Objetivo: encontrar observações individuais com diagnóstico de referência de AVC versus condições semelhantes (*stroke mimics*) e medidas compatíveis com `arm_ratio`, `arm_weak_side_code`, `facial_asymmetry_score`, `heart_rate` e `spo2`.
+
+**Resultado da busca:** não foi localizada, nas fontes consultadas abaixo, uma base aberta e diretamente compatível com as cinco entradas do aplicativo. Isso não prova inexistência de outras bases. Dados de uma escala clínica não podem ser renomeados como saídas do modelo YOLO ou como geometria de câmera sem uma validação de correspondência.
+
+## Candidatos verificados
+
+| Base / fonte primária | Dados disponíveis | Acesso e licença | Adequação ao projeto |
+|---|---|---|---|
+| [NIHSS Annotations for MIMIC-III, v1.0.0](https://physionet.org/content/stroke-scale-mimic-iii/1.0.0/) | Corpus anotado de 312 pacientes com AVC, incluindo itens de paresia facial e braço direito/esquerdo em resumos de alta. A finalidade é extração de informação de texto. | Credenciamento PhysioNet, treinamento CITI e acordo de uso; PhysioNet Credentialed Health Data License 1.5.0. | Não oferece, por si, controles sem AVC ou *mimics*. NIHSS facial/motor não corresponde aos campos YOLO/`arm_ratio`. O texto de alta também pode conter informações posteriores à triagem. Exigiria acesso autorizado, seleção temporal e outro contrato de atributos. |
+| [MC-MED, v1.0.1](https://physionet.org/content/mc-med/1.0.1/) | 118.385 visitas adultas de emergência; frequência cardíaca e SpO₂ na triagem e por minuto, diagnósticos ICD e dados de atendimento. Oferece partições por paciente e cronológicas. | Credenciamento PhysioNet, treinamento CITI e acordo de uso; PhysioNet Credentialed Health Data License 1.5.0. | Promissor para estudar sinais vitais em uma coorte definida. A documentação não fornece as medições visuais do projeto. Diagnóstico primário ICD requer definição e revisão da referência; não equivale automaticamente a AVC agudo confirmado contra *mimics*. |
+| [Stroke_Analysis, Mendeley Data v1](https://data.mendeley.com/datasets/jpb5tds9f6/1) | A página descreve idade, NIHSS, mRS, pressão sistólica/diastólica, glicose, paralisia, tabagismo, IMC e colesterol. | Página com opção de download; licença declarada CC BY 4.0. DOI 10.17632/jpb5tds9f6.1. | Não descreve BPM, SpO₂, geometria do braço ou classes faciais YOLO. A documentação consultada não estabelece uma referência individual AVC versus *mimic* nem a procedência clínica suficiente para este treino. Os arquivos não foram tratados como base compatível. |
+| [Cerebral Vasoregulation in Elderly with Stroke — índice PhysioNet](https://physionet.org/content/?topic=stroke) | O índice descreve estudo transversal de 60 pessoas com AVC e 60 controles, com dados multimodais de vasorregulação. | O índice identifica acesso aberto; a página específica `cves/1.0.0/` retornou 404 nesta consulta. Arquivos/licença não foram verificados diretamente. | Não foi possível confirmar campos e acesso. O estudo de pessoas que sofreram AVC não deve ser apresentado como conjunto de triagem aguda. Não foi utilizado. |
+| [Identification of ischemic stroke patients based on plasma concentrations of extracellular vesicles — Figshare](https://doi.org/10.6084/m9.figshare.28688051) | Metadados públicos descrevem citometria de fluxo e concentrações de subtipos de vesículas extracelulares. O [artigo correspondente](https://pmc.ncbi.nlm.nih.gov/articles/PMC12596396/) compara 66 pacientes com AVC isquêmico e 89 com outros diagnósticos. | A [API pública do repositório](https://api.figshare.com/v2/articles/28688051) informa CC BY 4.0 e um ZIP de aproximadamente 4 MB; a descrição também menciona compartilhamento de arquivos mediante solicitação. | A fonte descreve biomarcadores sanguíneos, idade e pressão arterial; não documenta as cinco medidas do aplicativo. Mesmo um experimento útil com esses biomarcadores exigiria outro conjunto de entradas e não poderia ser ativado no modelo atual. |
+
+## Estudo próximo do problema, mas sem registros individuais recuperados
+
+[McClelland e colaboradores: *The positive predictive value of stroke identification by ambulance clinicians in North East England: a service evaluation*](https://research.tees.ac.uk/ws/files/16467913/67C6D4DA_46B5_4D68_8D92_41DCEE6CAB0D.pdf) analisou 5.645 atendimentos suspeitos. Na tabela, o grupo AVC/AIT apresentou fraqueza de braço em 71% e alteração facial em 61%; nos *mimics*, 54% e 48%. BPM médio foi 82 (DP 18) versus 84 (DP 19), e SpO₂ foi 96% (DP 3) em ambos.
+
+O artigo reúne AVC e AIT no grupo de referência e classifica alguns casos sem correspondência hospitalar como *mimics*, limitações que precisam acompanhar sua interpretação. O PDF consultado contém estatísticas agregadas, não uma tabela pública de pacientes pronta para treinamento. Não foram extraídos registros individuais desse trabalho.
+
+## Consequência para o treinamento
+
+Médias, desvios, percentuais e limiares encontrados na literatura não fornecem as combinações de atributos de cada pessoa nem um diagnóstico independente por linha. Gerar pessoas a partir dessas estatísticas criaria outra simulação, com correlações escolhidas pelo programador. Treinar e avaliar nessa simulação mede concordância com tais escolhas, não detecção de AVC.
+
+Para treinar o classificador atual com dados reais, é necessário coletar as cinco medidas com a mesma aquisição do aplicativo, associá-las a um desfecho clínico independente e incluir casos sem AVC que se pareçam com AVC. Outra possibilidade é obter uma base autorizada e construir um experimento separado com os atributos efetivamente disponíveis nela; isso não permite transplantar suas previsões para as entradas atuais sem estudo de correspondência.
+
+Não foram baixados dados credenciados, aceitos acordos de uso nem contatados autores nesta pesquisa.
